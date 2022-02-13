@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { io } from '$lib/realtime';
 	import { onMount } from 'svelte';
 
@@ -6,6 +6,17 @@
 	let username = '';
 
 	let messages = [];
+
+	onMount(() => {
+		io.on('message', (message) => {
+			// Listen to the message event
+			messages = [...messages, message];
+		});
+		io.on('name', (name) => {
+			// Another listener for the name:
+			username = name; // Update the name so it can be displayed
+		});
+	});
 
 	function sendMessage() {
 		const message = textfield.trim();
@@ -17,10 +28,10 @@
 </script>
 
 <svelte:head>
-	<title>Todos</title>
+	<title>Live Chat</title>
 </svelte:head>
 
-<div class="h-screen w-screen bg-zinc-800">
+<div class="h-screen /*w-screen*/ bg-zinc-800 flex">
 	<div class="h-full w-full max-w-md mx-auto bg-zinc-500 flex flex-col">
 		<header
 			class="px-6 py-4 border-b border-zinc-800 bg-zinc-700 text-white shrink-0 flex items-center justify-between"
